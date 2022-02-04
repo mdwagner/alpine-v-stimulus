@@ -13,6 +13,7 @@
     "vite": "^2.7.2"
   },
   "dependencies": {
+    "@hotwired/stimulus": "^3.0.1",
     "alpinejs": "^3.8.1"
   }
 }

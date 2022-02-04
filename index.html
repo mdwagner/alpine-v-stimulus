@@ -12,7 +12,90 @@
     </style>
     <script type="module" src="/main.js"></script>
   </head>
-  <body x-data x-cloak>
-    <h1 class="text-3xl font-bold underline">Hello World!</h1>
+  <body x-data x-cloak class="p-4">
+    <div class="flex flex-col gap-y-10">
+      <div data-controller="hello">
+        <h1 class="text-3xl">Stimulus</h1>
+        <input data-hello-target="name" type="text" class="border-2" />
+        <button data-action="click->hello#greet">Greet</button>
+      </div>
+      <!-- break -->
+      <div
+        x-data="{
+          name: '',
+          greet() {
+            console.log(`Hello, ${this.name}`)
+          }
+        }"
+      >
+        <h1 class="text-3xl">Alpine</h1>
+        <input x-model="name" type="text" class="border-2" />
+        <button @click="greet()">Greet</button>
+      </div>
+      <!-- break -->
+      <div x-data="hello">
+        <h1 class="text-3xl">Alpine (with Alpine.data)</h1>
+        <input x-model="name" type="text" class="border-2" />
+        <button x-on:click="greet">Greet</button>
+      </div>
+      <br />
+      <div data-controller="clipboard">
+        <h1 class="text-3xl">Stimulus</h1>
+        PIN:
+        <input
+          data-clipboard-target="source"
+          type="text"
+          value="1234"
+          readonly
+          class="border-2"
+        />
+        <button data-action="clipboard#copy">Copy to Clipboard</button>
+      </div>
+      <!-- break -->
+      <div data-controller="clipboard">
+        <h1 class="text-3xl">Stimulus (copied)</h1>
+        PIN:
+        <textarea data-clipboard-target="source" readonly class="border-2">
+5432</textarea
+        >
+        <a href="#" data-action="clipboard#copy">Copy to Clipboard</a>
+      </div>
+      <!-- break -->
+      <div x-data>
+        <h1 class="text-3xl">Alpine</h1>
+        PIN:
+        <input
+          x-ref="clipboard"
+          type="text"
+          value="1234567"
+          readonly
+          class="border-2"
+        />
+        <button @click="$clipboard($refs.clipboard.value)">
+          Copy to Clipboard
+        </button>
+      </div>
+      <!-- break -->
+      <div
+        x-data="{
+        copy() {
+          this.$refs.clipboard.select();
+          document.execCommand('copy');
+        }
+      }"
+      >
+        <h1 class="text-3xl">Alpine (copied)</h1>
+        PIN:
+        <textarea x-ref="clipboard" readonly class="border-2">7654321</textarea>
+        <a href="#" @click.prevent="$rawClipboard($refs.clipboard)">Copy to Clipboard</a>
+      </div>
+      <!-- break -->
+      <div x-data="clipboard">
+        <h1 class="text-3xl">Alpine (copied) (with Alpine.data)</h1>
+        PIN:
+        <textarea x-ref="clipboard" readonly class="border-2">987654321</textarea>
+        <a href="#" @click.prevent="copy">Copy to Clipboard</a>
+      </div>
+    </div>
   </body>
 </html>
