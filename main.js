@@ -1,10 +1,15 @@
 import "./style.css";
 import Alpine from "alpinejs";
-import { Application, Controller } from "@hotwired/stimulus";
+import {
+  Application,
+  Controller
+} from "@hotwired/stimulus";
+import * as jsBeautify from "js-beautify";
 
 Object.assign(window, {
   Stimulus: Application.start(),
   Alpine,
+  jsBeautify,
 });
 
 Stimulus.register(
@@ -32,6 +37,14 @@ Stimulus.register(
     }
   }
 );
+
+Alpine.magic("htmlFmt", () => (subject) => {
+  subject = subject.replace(/\s+\<\!\-\-\s+prettier\-ignore\s+\-\-\>/g, "");
+  return jsBeautify.html(subject, {
+    indent_size: 2,
+    wrap_line_length: 40,
+  });
+})
 
 Alpine.magic("clipboard", () => (subject) => {
   navigator.clipboard.writeText(subject);

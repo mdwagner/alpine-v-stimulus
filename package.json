@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.0.1",
-    "alpinejs": "^3.8.1"
+    "alpinejs": "^3.8.1",
+    "js-beautify": "^1.14.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.2",
