@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.17e50649.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alpine vs. Stimulus</title>
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
+    
+    <script type="module" crossorigin src="/assets/index.5051028d.js"></script>
+    <link rel="modulepreload" href="/assets/vendor.6d44c6b0.js">
+    <link rel="stylesheet" href="/assets/index.92081096.css">
+  </head>
+  <body x-cloak x-data>
+    <div class="overflow-hidden bg-white">
+      <div class="relative mx-auto max-w-7xl py-16 px-4 sm:px-6 lg:px-8">
+        <div class="mt-8 lg:grid lg:grid-cols-2 lg:gap-8">
+          <div class="relative lg:col-start-2 lg:row-start-1">
+            <div
+              id="stimulus-container"
+              class="relative mx-auto max-w-prose text-base lg:max-w-none"></div>
+            <br />
+            <pre
+              class="whitespace-pre-wrap text-sm"
+              x-text="$htmlFmt($refs.stimulusRef.innerHTML)"></pre>
+          </div>
+          <div class="mt-8 lg:mt-0">
+            <div
+              id="alpine-container"
+              class="mx-auto max-w-prose text-base lg:max-w-none"></div>
+            <br />
+            <pre
+              class="whitespace-pre-wrap text-sm"
+              x-text="$htmlFmt($refs.alpineRef.innerHTML)"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template x-teleport="#stimulus-container" x-ref="stimulusRef">
+      <div x-ignore>
+        <div data-controller="hello">
+          <input data-hello-target="name" type="text" class="border-2" />
+          <button data-action="click->hello#greet">Greet</button>
+        </div>
+
+        <div data-controller="clipboard">
+          PIN:
+          <input
+            data-clipboard-target="source"
+            type="text"
+            value="1234"
+            readonly
+            class="border-2" />
+          <button data-action="clipboard#copy">Copy to Clipboard</button>
+        </div>
+
+        <div data-controller="clipboard">
+          PIN:
+          <!-- prettier-ignore -->
+          <textarea data-clipboard-target="source" readonly class="border-2">5432</textarea>
+          <a href="#" data-action="clipboard#copy">Copy to Clipboard</a>
+        </div>
+      </div>
+    </template>
+
+    <template x-teleport="#alpine-container" x-ref="alpineRef">
+      <div x-data>
+        <div x-data="{ name: '' }">
+          <input x-model="name" type="text" class="border-2" />
+          <button @click="console.log(`Hello, ${name}`)">Greet</button>
+        </div>
+
+        <div x-data="hello">
+          <input x-model="name" type="text" class="border-2" />
+          <button x-on:click="greet">Greet</button>
+        </div>
+
+        <div x-data>
+          PIN:
+          <input
+            x-ref="clipboard"
+            type="text"
+            value="1234567"
+            readonly
+            class="border-2" />
+          <button @click="$clipboard($refs.clipboard.value)">
+            Copy to Clipboard
+          </button>
+        </div>
+
+        <div
+          x-data="
+  {
+    copy() {
+      this.$refs.clipboard.select();
+      document.execCommand('copy');
+    }
+  }
+  ">
+          PIN:
+          <!-- prettier-ignore -->
+          <textarea x-ref="clipboard" readonly class="border-2">7654321</textarea>
+          <!-- prettier-ignore -->
+          <a href="#" @click.prevent="$rawClipboard($refs.clipboard)">Copy to Clipboard</a>
+        </div>
+
+        <div x-data="clipboard">
+          PIN:
+          <!-- prettier-ignore -->
+          <textarea x-ref="clipboard" readonly class="border-2">987654321</textarea>
+          <a href="#" @click.prevent="copy">Copy to Clipboard</a>
+        </div>
+      </div>
+    </template>
+  </body>
+</html>
